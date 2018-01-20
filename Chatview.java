@@ -5,17 +5,17 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-public Class Chatview implements ActionListener{
+public Class Chatview extends JFrame{
 private JPanel writingPanel = New JPanel
-private JFrame chatWindow = New JFrame
-private JScrollPanel messagePanel = New JScrollPanel
-private JButton sendButton = New JButton("Send")
+private JScrollPanel messagePanel = New JScrollPanel;
+private JButton sendButton = New JButton("Send");
   
-  public Chatview(Controller c){
+  public Chatview(Controller c, String name){
+    super(name);
     
     
   }
-  sendButton.addActionListener(this)
+  sendButton.addActionListener(this) \\eller ska det vara till controllern?
   
   public void actionPerformed(ActionEvent e){
     c.updatechatViewer }
