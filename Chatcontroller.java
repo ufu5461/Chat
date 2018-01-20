@@ -1,6 +1,6 @@
 \\ importera paket
 
-public Class Chatcontroller{
+public Class Chatcontroller implements ActionListerner{
 
 public Chatcontroller(Chatt c){
   public Chatviewer = New Chatviewer(this)
