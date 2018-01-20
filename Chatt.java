@@ -4,20 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chatt {
-	List<String> users; 
-	List<BufferedReader> in;
-	List<PrintWriter> out;
+	private List<User> users; 
+	private List<String> messages;
 	
 	public Chatt(String user, BufferedReader in, PrintWriter out) {
-		this.users = new ArrayList<String>();
-		this.in = new ArrayList<BufferedReader>();
-		this.out = new ArrayList<PrintWriter>();
+		this.users = new ArrayList<User>();
+		this.messages = new ArrayList<String>();
 		addUser(user, in, out);
 	}
 	
 	public void addUser(String user, BufferedReader in, PrintWriter out) {
-		this.users.add(user);
-		this.in.add(in);
-		this.out.add(out);
+		User tempuser = new User(user, in, out);
+		users.add(tempuser);
 	}
+	
+	public void removeUser(User user) {
+		users.remove(users.indexOf(user));
+	}
+	
+	public void addMessage(String message) {
+		messages.add(message);
+	}
+	
+	public List<String> getMessages(){
+		return messages;
+	}
+	
 }
