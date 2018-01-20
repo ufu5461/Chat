@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-public Class Chatview extends JFrame{
+public Class Chatview extends JFrame implements ActionListerner{
 private JPanel writingPanel = New JPanel
 private JScrollPanel messagePanel = New JScrollPanel;
 private JButton sendButton = New JButton("Send");
