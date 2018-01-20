@@ -50,8 +50,8 @@ public class ServerModel {
 						users[i] = new User(name, in, out, clientSocket);
 						boolean pub = false;
 						if(in.readLine().equals("True")) {
-							chats[0].addUser(users[i]);
-						}else {
+							chats[0].addUser(users[i]); // Add to public chat
+						}else { // Create private chat
 							chats[i] = new Chatt("Private: " + myName + " and " + name);
 							chatsThread[i] = new Thread(chats[i]);
 							chatsThread[i].start();
