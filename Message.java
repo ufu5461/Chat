@@ -3,7 +3,7 @@ private class Message {
   private int hourReceived
   private int minuteReceived
   private int rgbColour
-  private string message
+  private String message
   
   private Message (string messageSender,int hourReceived, int minuteReceived, int rgbColour, string message)  \\ 
   
@@ -11,7 +11,7 @@ private class Message {
   return messageSender}
   
   getTime(){
-  return hourReceiver + "." + minutereceived}
+  return (hourReceiver.toString() + "." + minutereceived.toString()}
   
   getText(){
   return message}
