@@ -9,7 +9,6 @@ public class ClientModel {
 	
 	List<Chat> chats;
 	List<Thread> threads;
-	int portNumber;
 	String myName;
 	// Create new chats if client
 	
