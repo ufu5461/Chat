@@ -21,23 +21,31 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-public Class Chatview extends JFrame{
+public Class Chatview extends JFrame implements WindowListener{
 private Controller c;
 private JTextField messageBox = New JTextField;
+private JScrollPane historyScroll = New JScrollPane;
 private JTextArea messagePanel = New JTextArea;
 private JButton sendButton = New JButton("Send");
 private JButton leaveButton = New JButton("Leave chat");
   
-  public Chatview(Controller con, String name){
+public Chatview(Controller con, String name){
     super(name);
     this.c = con;
-    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    this.setSize(500, 500);
-    this.add(messagepanel);
-    this.add(sendbutton);
-    this.add(writingPanel);
+    this.addWindeowListener(new WindowAdapter(){
+      public void windowClosing(WindowEvent e){
+      c.closeDown()}};
+    this.setSize(500, 500);  
+    sendButton.addActionListener(c);
+    leaveButton.addActionListener(c)  ;         
+    this.add(historyscroll, BorderLayout.CENTER);
+    this.add(messagePanel, BorderLayout.BOTTOM);    
+    this.add(sendButton, BorderLayout.RIGHT);    
+    this.add(leavButton, BorderLayout.RIGHT);    
+    historyScroll.add(messagePanel); 
+    this.pack()
     setVisible(true);
-    sendButton.addActionListener(c)   
+                          
     
   }
   
