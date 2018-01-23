@@ -14,7 +14,7 @@ public class Chat implements Runnable {
 	public Chat(String name) {
 		this.users = new ArrayList<User>();
 		this.messages = new ArrayList<Message>();
-		c = new Controller(this);
+		c = new Controller(this); // Creates controller that takes chat as param
 		chattName = name;
 	}
 	
