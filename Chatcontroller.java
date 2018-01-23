@@ -29,6 +29,7 @@ public void updateView(){
  public void actionPerformed(ActionEvent e){
    String command = e.getActionCommand();
    if(command == "Send"){
+     try 
     ch.addmessage(v.exportMessage, v.exportColour, String "Me")
     this.updateView();
     v.clearSendwindow();
