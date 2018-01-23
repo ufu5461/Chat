@@ -9,11 +9,12 @@ public class ClientModel {
 	
 	List<Chat> chats;
 	List<Thread> threads;
-	String myName;
+	String myName = "LeoTesting";
 	// Create new chats if client
 	
 	public ClientModel() {
 		chats = new ArrayList<Chat>();
+		threads = new ArrayList<Thread>();
 	}
 	
 	public void shutDown() {
@@ -37,25 +38,34 @@ public class ClientModel {
 			        new BufferedReader(
 			            new InputStreamReader(echoSocket.getInputStream()));
 			    
+			    System.out.println("Managed to set up comunication\n");
+			    
 			    // Set up communication with server
-			    out.print(myName);
+			    Thread.sleep(1000);
+			    out.println(myName);
+			    System.out.println("Transmitted name");
+			    Thread.sleep(1000);
 			    if(pub) {
-			    		out.print("True");
+			    		out.println("True");
+			    		System.out.println("Transmitted True");
 			    }else {
-			    		out.print("False");
+			    		out.println("False");
 			    }
 			    
 			    usr = new User("Server", in, out, echoSocket);
 			    ch = new Chat("Chat with: " +  hostName);
+			    ch.addUser(usr);
 			    chats.add(ch);
-			    
+			    System.out.println("A chat now exists");
 			    
 		} catch(Exception e){
+			e.printStackTrace();
 			return false;
 		}
 		
 		threads.add(new Thread(ch));
 		threads.get(threads.size()-1).start();
+		System.out.println("Started client thread");
 		return true;
 
 
