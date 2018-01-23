@@ -54,7 +54,7 @@ public Chatview(Controller con, String name){
   
 public void publishChatview(String htmlMessages){
   messagePanel.setText(htmlMessages);
-  this.pack();}
+  this.pack();} \\behövs detta?
                             
                             
                             
