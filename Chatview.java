@@ -29,6 +29,7 @@ private JEditorPanel messagePanel = New JEditorPane;
 private JTextField colourField = New JTextField  
 private JButton sendButton = New JButton("Send");
 private JButton leaveButton = New JButton("Leave chat");
+private String currentHtml
   
 public Chatview(Controller con, String name){
     super(name);
@@ -52,8 +53,9 @@ public Chatview(Controller con, String name){
     messagPanel.setContentType(html);
   }
   
-public void publishChatview(String htmlMessages){
-  messagePanel.setText(htmlMessages);
+public void publishChatview(String htmlMessage){
+  messagePanel.setText(currentHtml + htmlMessages);
+  currentHtml = currentHtml + htmlMessages
   this.pack();} \\behövs detta?
                             
                             
