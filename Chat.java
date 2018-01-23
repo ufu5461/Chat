@@ -50,6 +50,10 @@ public class Chat implements Runnable {
 		users.remove(us);
 	}
 	
+	public List<Message> getMessages() {
+		return messages;
+	}
+	
 	/**
 	 * Send a message to all except one
 	 * <p>
@@ -95,6 +99,17 @@ public class Chat implements Runnable {
 		sendMessage(msg, i);
 		c.updateView();
 		
+	}
+	
+	/**
+	 * Closes connections
+	 * <p>
+	 * For each user in chat, call closeConnection method
+	 */
+	public void closeChat() {
+		for(int i = 0; i < users.size(); i++) {
+			users.get(i).closeConnection();
+		}
 	}
 	
 	
