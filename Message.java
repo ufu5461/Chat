@@ -12,17 +12,17 @@ private class Message {
     this.message = parsedMessage;
   }  
   
-  getSender(){
+  public String getSender(){
   return messageSender;}
   
-  getTime(){
+  public String getTime(){
   return (hourReceived.toString() + "." + minutereceived.toString();
           }
   
-  getText(){
+  public String getText(){
   return message;}
   
-  getColour(){
+  public int getColour(){
   return rgeColour;}
 
 }
