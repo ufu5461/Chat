@@ -2,7 +2,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public Class Chatcontroller implements Actionlistern  er{
+public Class Chatcontroller implements Actionlisterner{
 private Chatviewer v;
 private Chat ch;
   
@@ -12,8 +12,23 @@ public Chatcontroller(Chat ch){
   
 public void updateView(){
   List<Message> previousMessages = ch.getMessages
+  StringBuilder stringBuilder = new StringBuilder();
+  for(int i=0, i < previousMessages.size(), i++){
+      stringBuilder.append(previousMessages[i].getHtml())
+  }
+String finalHtml = stringBuilder.toString();
+v.publishChatView(finalHtml)
 }
             
+  
+  
+  
+  
+  
+  
+  
+  
+  
 @Override
  public void actionPerformed(ActionEvent e){
    String command = e.getActionCommand();
