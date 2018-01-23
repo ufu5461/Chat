@@ -25,7 +25,8 @@ public Class Chatview extends JFrame implements WindowListener{
 private Controller c;
 private JTextField messageBox = New JTextField;
 private JScrollPane historyScroll = New JScrollPane;
-private JTextArea messagePanel = New JTextArea;
+private JEditorPanel messagePanel = New JEditorPane;
+private JTextField colourField = New JTextField  
 private JButton sendButton = New JButton("Send");
 private JButton leaveButton = New JButton("Leave chat");
   
@@ -39,24 +40,40 @@ public Chatview(Controller con, String name){
     sendButton.addActionListener(c);
     leaveButton.addActionListener(c)  ;         
     this.add(historyscroll, BorderLayout.CENTER);
-    this.add(messagePanel, BorderLayout.BOTTOM);    
+    this.add(messageBox, BorderLayout.BOTTOM);    
     this.add(sendButton, BorderLayout.RIGHT);    
-    this.add(leavButton, BorderLayout.RIGHT);    
-    historyScroll.add(messagePanel); 
-    this.pack()
-    setVisible(true);
-                          
-    
+    this.add(leavButton, BorderLayout.RIGHT);
+    this.add(colourField, BorderLayout.BOTTOM); 
+    historyScroll.add(messagePanel);
+    historyScroll.setEditable(False)
+    historyScroll.setColumnHeader("Previous messages with" + name);
+    this.pack();
+    this.setVisible(true);
+    messagPanel.setContentType(html);
   }
   
-public void updateChatview(List<Message> mlist){}
+public void publishChatview(String htmlMessages){
+  messagePanel.setText(htmlMessages);
+  this.pack();}
+                            
+                            
+                            
+public void clearSendwindow(){
+  messageBox.setText(null); }
   
-public void clearSendwindow(){}
   
-public void leaveChat(){}
+public void exitView(){
+   int n = JOptionPane.showConfirmDialog(
+null, "Are you sure you want to disconnect?",JOptionPane.YES_NO_OPTION);
+  if(true){
+            c.closeDown();
+        }
+        else { break;}
   
-public void exportMessage(){}
-  
-
+public String exportMessage(){
+  return messageBox.getText();
+}
+  public String exportColour(){
+  return colourBox.getText()}
 }
 
