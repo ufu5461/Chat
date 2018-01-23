@@ -5,18 +5,24 @@ private class Message {
   private int rgbColour
   private String message
   
-  private Message (string messageSender,int hourReceived, int minuteReceived, int rgbColour, string message)  \\ 
+  private Message (User user,int hour, int minuteReceived, int colour, string parsedMessage){
+    this.messegeSender = user.getName();
+    this.hourreceived = hour;
+    this.rgbColour = colour;
+    this.message = parsedMessage;
+  }  
   
   getSender(){
-  return messageSender}
+  return messageSender;}
   
   getTime(){
-  return (hourReceiver.toString() + "." + minutereceived.toString()}
+  return (hourReceived.toString() + "." + minutereceived.toString();
+          }
   
   getText(){
-  return message}
+  return message;}
   
   getColour(){
-  return rgeColour}
+  return rgeColour;}
 
 }
