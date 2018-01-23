@@ -20,27 +20,79 @@ public class Chat implements Runnable {
 		chattName = name;
 	}
 	
+	/**
+	 * Add a chat User to the user list
+	 * 
+	 * @param  us  	a User object
+	 */
 	public void addUser(User us) {
 		users.add(us);
 	}
 	
+	/**
+	 * Remove a chat User from the user list
+	 * 
+	 * @param  us  	a User object
+	 */
 	public void removeUser(User us) {
 		users.remove(us);
 	}
 	
-	public void sendMessage(String msg) {
-		for(int i = 0; i < users.size(); i++) {
-			users.get(i).out.println(msg);
+	/**
+	 * Send a message to all except one
+	 * <p>
+	 * The message will be sent to all except 
+	 * specified users connected to the chat.
+	 * 
+	 * @param  msg  	a message string 
+	 * @param  i 	index of user not to receive mesage
+	 */
+	public void sendMessage(String msg, int i) {
+		for(int j = 0; j < users.size(); j++) {
+			if(j != i) {
+				users.get(j).out.println(msg);
+			}
 		}
 	}
 	
-	public void recieveMessage(String msg) { // This is to return a message object
+	/**
+	 * Send a message to all
+	 * <p>
+	 * The message will be sent all users
+	 * 
+	 * @param  msg  	a message string 
+	 */
+	public void sendMessage(String msg) {
+		for(int j = 0; j < users.size(); j++) {
+			users.get(j).out.println(msg);
+		}
+	}
+	
+	/**
+	 * Creates a message object from a received string
+	 * <p>
+	 * called when a message arrives
+	 *  
+	 * @param  msg  	a message string
+	 * @param  i		the index of the user the message was received from
+	 */
+	private void recieveMessage(String msg, int i) { // This is to return a message object
+		
 		System.out.println(msg);
 		messages.add(p.parseMessage(msg));
+		sendMessage(msg, i);
 		c.updateView();
 		
 	}
-
+	
+	
+	/**
+	 * The runnable component of the class
+	 * <p>
+	 * Listens for new input from other users
+	 *  
+	 * @param  msg  	a message string
+	 */
 	@Override
 	public void run() {
 		// Content here can be executed at the same time as methods above can be called
@@ -49,7 +101,7 @@ public class Chat implements Runnable {
 			for(int i = 0; i < users.size(); i++) {
 				try {
 				if((input = users.get(i).in.readLine()) != null) {
-					recieveMessage(input);
+					recieveMessage(input, i);
 				}
 				}catch(Exception e) {
 					
