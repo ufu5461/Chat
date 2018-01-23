@@ -16,7 +16,7 @@ public class ServerModel {
 	private static int maxConnections = 10;
 	private static User[] users = new User[maxConnections];
 	private static Thread[] chatsThread = new Thread[maxConnections];
-	private static Chatt[] chats = new Chatt[maxConnections];
+	private static Chat[] chats = new Chat[maxConnections];
 	
 	public ServerModel() {
 		// Open new server connection
@@ -26,7 +26,7 @@ public class ServerModel {
 		      System.out.println(e);
 		    }	
 		// Create a public chat in Thread[0]
-		chats[0] = new Chatt("Public: " + myName);
+		chats[0] = new Chat("Public: " + myName);
 		chatsThread[0] = new Thread(chats[0]);
 		chatsThread[0].start();
 		incomming();
@@ -40,19 +40,20 @@ public class ServerModel {
 		  			PrintWriter out;
 		  			// Wait for new connection
 					Socket clientSocket = serverSocket.accept();
-					// If more conenctions available create a user
+					
+					// If more connections available create a user
 					if(i < maxConnections) {
 						out = new PrintWriter(clientSocket.getOutputStream(), true);
 						in = new BufferedReader(
 							        new InputStreamReader(clientSocket.getInputStream()));
+						
 						// Assumes first input name next public bool
 						String name = in.readLine();
 						users[i] = new User(name, in, out, clientSocket);
-						boolean pub = false;
 						if(in.readLine().equals("True")) {
 							chats[0].addUser(users[i]); // Add to public chat
 						}else { // Create private chat
-							chats[i] = new Chatt("Private: " + myName + " and " + name);
+							chats[i] = new Chat("Private: " + myName + " and " + name);
 							chatsThread[i] = new Thread(chats[i]);
 							chatsThread[i].start();
 						}
