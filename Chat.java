@@ -8,7 +8,6 @@ public class Chat implements Runnable {
 	private String chattName;
 	private List<User> users; 
 	private List<Message> messages;
-	private View v;
 	private Controller c; 
 	
 	public Chat(String name) {
