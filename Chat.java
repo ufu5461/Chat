@@ -12,6 +12,18 @@ public class Chat implements Runnable {
 	private Controller c; 
 	private Parser p;
 	
+	
+	/**
+	 * Constructor to Chat
+	 * <p>
+	 * Initializes arrays of users, messages.
+	 * Creates a Controller with this chat object
+	 * as parameter.
+	 * Creates a Parser object to read input chat msg
+	 * Set chat name
+	 * 
+	 * @param  name  A string with the name of the chat
+	 */
 	public Chat(String name) {
 		this.users = new ArrayList<User>();
 		this.messages = new ArrayList<Message>();
@@ -50,7 +62,7 @@ public class Chat implements Runnable {
 	public void sendMessage(String msg, int i) {
 		for(int j = 0; j < users.size(); j++) {
 			if(j != i) {
-				users.get(j).out.println(msg);
+				users.get(j).getOut().println(msg);
 			}
 		}
 	}
@@ -64,7 +76,7 @@ public class Chat implements Runnable {
 	 */
 	public void sendMessage(String msg) {
 		for(int j = 0; j < users.size(); j++) {
-			users.get(j).out.println(msg);
+			users.get(j).getOut().println(msg);
 		}
 	}
 	
