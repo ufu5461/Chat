@@ -8,12 +8,15 @@ public class Chat implements Runnable {
 	private String chattName;
 	private List<User> users; 
 	private List<Message> messages;
+	private View v;
 	private Controller c; 
+	private Parser p;
 	
 	public Chat(String name) {
 		this.users = new ArrayList<User>();
 		this.messages = new ArrayList<Message>();
-		c = new Controller(this); // Creates controller that takes chat as param
+		c = new Controller(this);
+		p = new Parser();
 		chattName = name;
 	}
 	
@@ -33,7 +36,9 @@ public class Chat implements Runnable {
 	
 	public void recieveMessage(String msg) { // This is to return a message object
 		System.out.println(msg);
-		//return new Message(msg);
+		messages.add(p.parseMessage(msg));
+		c.updateView();
+		
 	}
 
 	@Override
