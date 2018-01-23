@@ -8,9 +8,10 @@ public class Chat implements Runnable {
 	private String chattName;
 	private List<User> users; 
 	private List<Message> messages;
+	private List<UserInputReader> readers;
 	private View v;
 	private Controller c; 
-	private Parser p;
+	//private Parser p;
 	
 	
 	/**
@@ -27,8 +28,9 @@ public class Chat implements Runnable {
 	public Chat(String name) {
 		this.users = new ArrayList<User>();
 		this.messages = new ArrayList<Message>();
-		c = new Controller(this);
-		p = new Parser();
+		this.readers = new ArrayList<UserInputReader>();
+		//c = new Controller(this);
+		//p = new Parser();
 		chattName = name;
 	}
 	
@@ -38,6 +40,9 @@ public class Chat implements Runnable {
 	 * @param  us  	a User object
 	 */
 	public void addUser(User us) {
+		UserInputReader read = new UserInputReader(this,us, users.size());
+		new Thread(read).start();
+		readers.add(read);
 		users.add(us);
 	}
 	
@@ -71,6 +76,10 @@ public class Chat implements Runnable {
 		}
 	}
 	
+	public void addMessage(Message msg) {
+		messages.add(msg);
+	}
+	
 	/**
 	 * Send a message to all
 	 * <p>
@@ -92,12 +101,12 @@ public class Chat implements Runnable {
 	 * @param  msg  	a message string
 	 * @param  i		the index of the user the message was received from
 	 */
-	private void recieveMessage(String msg, int i) { // This is to return a message object
+	public void recieveMessage(String msg, int i) { // This is to return a message object
 		
 		System.out.println(msg);
-		messages.add(p.parseMessage(msg));
+		//messages.add(p.parseMessage(msg));
 		sendMessage(msg, i);
-		c.updateView();
+		//c.updateView();
 		
 	}
 	
@@ -122,18 +131,11 @@ public class Chat implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// Content here can be executed at the same time as methods above can be called
-		String input;
-		while(true) {
-			for(int i = 0; i < users.size(); i++) {
-				try {
-				if((input = users.get(i).in.readLine()) != null) {
-					recieveMessage(input, i);
-				}
-				}catch(Exception e) {
-					
-				}
-			}
+		System.out.println("Chat thread running");
+		for(int i = 0; i < users.size(); i++) {
+			readers.add(new UserInputReader(this,users.get(i), i));
+			(new Thread(readers.get(i))).start();
+			
 		}
 	}
 	
