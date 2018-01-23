@@ -14,4 +14,20 @@ public class User {
 		this.out = out;
 		this.s = s;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public BufferedReader getIn() {
+		return in;
+	}
+	
+	public PrintWriter getOut() {
+		return out;
+	}
+	
+	public Socket getS() {
+		return s;
+	}
 }
