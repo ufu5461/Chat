@@ -9,12 +9,14 @@ public class ClientModel {
 	
 	List<Chat> chats;
 	List<Thread> threads;
-	String myName = "LeoTesting";
+	String myName = "Client";
+	ConnectionManager manager;
 	// Create new chats if client
 	
 	public ClientModel() {
 		chats = new ArrayList<Chat>();
 		threads = new ArrayList<Thread>();
+		manager = new ConnectionManager(myName);
 	}
 	
 	public void shutDown() {
@@ -30,44 +32,27 @@ public class ClientModel {
 		Socket echoSocket;
 		User usr;
 		Chat ch;
-		try {
-			    echoSocket = new Socket(hostName, portNumber);
-			    out =
-			        new PrintWriter(echoSocket.getOutputStream(), true);
-			    in =
-			        new BufferedReader(
-			            new InputStreamReader(echoSocket.getInputStream()));
-			    
-			    System.out.println("Managed to set up comunication\n");
-			    
-			    // Set up communication with server
-			    Thread.sleep(1000);
-			    out.println(myName);
-			    System.out.println("Transmitted name");
-			    Thread.sleep(1000);
-			    if(pub) {
-			    		out.println("True");
-			    		System.out.println("Transmitted True");
-			    }else {
-			    		out.println("False");
-			    }
-			    
-			    usr = new User("Server", in, out, echoSocket);
-			    ch = new Chat("Chat with: " +  hostName);
-			    ch.addUser(usr);
-			    chats.add(ch);
-			    System.out.println("A chat now exists");
-			    
-		} catch(Exception e){
-			e.printStackTrace();
+		
+		usr = manager.connectTo(hostName, portNumber, pub);
+		
+		if(usr != null) {
+			ch = new Chat("Chat with: " + hostName);
+			ch.addUser(usr);
+			chats.add(ch);
+			System.out.println("ClientModel: Created a chat");
+			
+		}else {
+			System.out.println("ClientModel: Could not connect to " 
+		+ hostName + "at port " + portNumber);
 			return false;
 		}
 		
 		threads.add(new Thread(ch));
 		threads.get(threads.size()-1).start();
-		System.out.println("Started client thread");
+		System.out.println("ClientModel: Started client thread");
 		return true;
-
+		
+		
 
 	}
 }
