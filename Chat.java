@@ -3,15 +3,23 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Chat implements Runnable {
 	private String chattName;
 	private List<User> users; 
 	private List<Message> messages;
+	private List<FileReciever> transfers;
 	private List<UserInputReader> readers;
 	private View v;
-	private Controller c; 
-	//private Parser p;
+	private FileSender sending;
+	private String myHiddenASEkey;
+	private String myPublicASEkey;
+	private String myCasearKey;
+	private Chatcontroller c; 
+	private Parser p;
+	private String myName = "Leo";
+	private ConnectionManager manager;
 	
 	
 	/**
@@ -30,8 +38,9 @@ public class Chat implements Runnable {
 		this.messages = new ArrayList<Message>();
 		this.readers = new ArrayList<UserInputReader>();
 		//c = new Controller(this);
-		//p = new Parser();
+		p = new Parser(this);
 		chattName = name;
+		manager = new ConnectionManager(chattName);
 	}
 	
 	/**
@@ -40,10 +49,12 @@ public class Chat implements Runnable {
 	 * @param  us  	a User object
 	 */
 	public void addUser(User us) {
+		// Function to check user
 		UserInputReader read = new UserInputReader(this,us, users.size());
 		new Thread(read).start();
 		readers.add(read);
 		users.add(us);
+		sendFile(users.get(0));
 	}
 	
 	/**
@@ -66,12 +77,13 @@ public class Chat implements Runnable {
 	 * specified users connected to the chat.
 	 * 
 	 * @param  msg  	a message string 
-	 * @param  i 	index of user not to receive mesage
+	 * @param  i 	index of user not to receive message
 	 */
-	public void sendMessage(String msg, int i) {
+	public void sendMessage(Message msg, int i) {
+		String msgFormat = p.formatMessage(msg);
 		for(int j = 0; j < users.size(); j++) {
 			if(j != i) {
-				users.get(j).getOut().println(msg);
+				users.get(j).getOut().println(msgFormat);
 			}
 		}
 	}
@@ -87,7 +99,14 @@ public class Chat implements Runnable {
 	 * 
 	 * @param  msg  	a message string 
 	 */
-	public void sendMessage(String msg) {
+	public void sendMessage(Message msg) {
+		String msgFormat = p.formatMessage(msg);
+		for(int j = 0; j < users.size(); j++) {
+			users.get(j).getOut().println(msgFormat);
+		}
+	}
+	
+	public void sendMessageRaw(String msg) {
 		for(int j = 0; j < users.size(); j++) {
 			users.get(j).getOut().println(msg);
 		}
@@ -101,11 +120,35 @@ public class Chat implements Runnable {
 	 * @param  msg  	a message string
 	 * @param  i		the index of the user the message was received from
 	 */
-	public void recieveMessage(String msg, int i) { // This is to return a message object
+	public void recieveMessage(Message msg, int i) { // This is to return a message object
+		System.out.println("Incoming message: " + msg);
+		messages.add(msg);
+		System.out.println(msg.getHTML());
 		
-		System.out.println(msg);
-		//messages.add(p.parseMessage(msg));
-		sendMessage(msg, i);
+		// If User i disconnects
+		if(msg instanceof DisconnectMessage) {
+			User usr = msg.sentBy();
+			manager.closeConnection(usr.getIn(),usr.getOut(),usr.getS());
+			users.remove(usr);
+		}
+		if(msg instanceof FileMessage) {
+			FileMessage fmsg = (FileMessage) msg;
+			if(fmsg.isFileRequest()) {
+				FileReciever ftrans = new FileReciever(fmsg.getContent(), 
+						fmsg.getFileName(), fmsg.getFileSize(), 
+						fmsg.getSender(), fmsg.sentBy());
+				(new Thread(ftrans)).run();
+			}
+			else {
+				try {
+					sending.transferResponse(fmsg.getFileReply(), fmsg.getFilePort());
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}else {
+			sendMessage(msg, i);
+		}
 		//c.updateView();
 		
 	}
@@ -119,6 +162,13 @@ public class Chat implements Runnable {
 		for(int i = 0; i < users.size(); i++) {
 			users.get(i).closeConnection();
 		}
+	}
+	
+	public void sendFile(User usr) {
+		sending = new FileSender(usr, myName, this);
+		(new Thread(sending)).start();
+		
+		
 	}
 	
 	
@@ -136,6 +186,15 @@ public class Chat implements Runnable {
 			readers.add(new UserInputReader(this,users.get(i), i));
 			(new Thread(readers.get(i))).start();
 			
+		}
+		// PLACEHOLDER READING MY INPUT AND SENDING
+		Scanner sc = new Scanner(System.in);
+		while(true) {
+			String msg = sc.nextLine();
+			Message message = new Message();
+			message.setContent(msg);
+			message.setSender(myName);
+			sendMessage(message);
 		}
 	}
 	
