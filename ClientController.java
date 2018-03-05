@@ -5,9 +5,9 @@ public class ClientController implements ActionListener {
 	private ClientView v;
 	private ClientModel m;
 	
-	public ClientController() {
+	public ClientController(String name) {
 		v = new ClientView(this);
-		m = new ClientModel();
+		m = new ClientModel(name);
 	}
 
 	@Override
